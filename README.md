@@ -39,7 +39,7 @@ React app and run the Express server, which serves both the frontend and API.
 Use these settings:
 
 ```bash
-Build Command: npm install && npm run build
+Build Command: npm install --include=dev && npm run build
 Start Command: npm start
 ```
 
