@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { useNavigate } from "react-router-dom";
 
 const eventDetails = [
   { label: 'Sent by', value: 'Your friend' },
@@ -91,7 +92,11 @@ function EnvelopeCard({ onOpen }) {
   );
 }
 
-function InvitePreview({ onOpen }) {
+function InvitePreview() {
+  const openInvitation = () => {
+    window.location.href = "/invitation-access";
+  };
+
   return (
     <main className="page preview-page">
       <header className="topbar">
@@ -99,7 +104,7 @@ function InvitePreview({ onOpen }) {
         <nav className="nav-links" aria-label="Invitation navigation">
           <a href="#details">Details</a>
           <a href="#privacy">Privacy</a>
-          <button type="button" onClick={onOpen}>
+          <button type="button" onClick={openInvitation}>
             Open
           </button>
         </nav>
@@ -115,7 +120,11 @@ function InvitePreview({ onOpen }) {
           </p>
 
           <div className="hero-actions">
-            <button className="primary-action" type="button" onClick={onOpen}>
+            <button
+              className="primary-action"
+              type="button"
+              onClick={openInvitation}
+            >
               Open invitation
             </button>
             <a className="secondary-action" href="#details">
@@ -138,11 +147,16 @@ function InvitePreview({ onOpen }) {
             <span>Invitation preview</span>
             <span className="status-pill">Ready</span>
           </div>
-          <EnvelopeCard onOpen={onOpen} />
+
+          <EnvelopeCard onOpen={openInvitation} />
         </aside>
       </section>
 
-      <section className="support-grid" id="privacy" aria-label="Invitation support information">
+      <section
+        className="support-grid"
+        id="privacy"
+        aria-label="Invitation support information"
+      >
         <article className="info-panel">
           <span className="panel-icon">01</span>
           <h2>Guest-first experience</h2>
@@ -151,14 +165,16 @@ function InvitePreview({ onOpen }) {
             sender notes kept clear before you continue.
           </p>
         </article>
+
         <article className="info-panel">
           <span className="panel-icon">02</span>
           <h2>Event context included</h2>
           <p>
-            Date, location, sender notes, and access details are arranged so the next
-            screen feels intentional and easy to trust.
+            Date, location, sender notes, and access details are arranged so the
+            next screen feels intentional and easy to trust.
           </p>
         </article>
+
         <article className="info-panel accent-panel">
           <h2>What is inside?</h2>
           <ul>
