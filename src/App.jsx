@@ -295,7 +295,7 @@ function AccessScreen({ onBack }) {
               {prepared
                 ? 'Final invite code submitted'
                 : showFinalCodeForm
-                  ? 'Final invite code required'
+                  ? 'Final code required'
                   : 'Preparing your invitation'}
             </span>
             <span
