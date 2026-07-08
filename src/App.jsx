@@ -1,4 +1,5 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+
 
 const eventDetails = [
   { label: 'Sent by', value: 'Your friend' },
@@ -407,13 +408,33 @@ function AccessScreen({ onBack }) {
 }
 
 function App() {
-  const [screen, setScreen] = useState('preview');
+  const [, forceUpdate] = useState(0);
+  const isAccessPage = window.location.pathname === '/invitation-access';
 
-  if (screen === 'access') {
-    return <AccessScreen onBack={() => setScreen('preview')} />;
+  useEffect(() => {
+    const handleRouteChange = () => forceUpdate((value) => value + 1);
+
+    window.addEventListener('popstate', handleRouteChange);
+
+    return () => {
+      window.removeEventListener('popstate', handleRouteChange);
+    };
+  }, []);
+
+  function openInvitation() {
+    window.history.pushState({}, '', '/invitation-access');
+    forceUpdate((value) => value + 1);
   }
 
-  return <InvitePreview onOpen={() => setScreen('access')} />;
-}
+  function goBack() {
+    window.history.pushState({}, '', '/');
+    forceUpdate((value) => value + 1);
+  }
 
+  if (isAccessPage) {
+    return <AccessScreen onBack={goBack} />;
+  }
+
+  return <InvitePreview onOpen={openInvitation} />;
+}
 export default App;
