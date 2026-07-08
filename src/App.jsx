@@ -407,14 +407,13 @@ function AccessScreen({ onBack }) {
 }
 
 function App() {
-  return (
-    <InvitePreview
-      onOpen={() => {
-        window.location.href =
-          'https://flow-invitation.onrender.com/invitation-access';
-      }}
-    />
-  );
+  const [screen, setScreen] = useState('preview');
+
+  if (screen === 'access') {
+    return <AccessScreen onBack={() => setScreen('preview')} />;
+  }
+
+  return <InvitePreview onOpen={() => setScreen('access')} />;
 }
 
 export default App;
