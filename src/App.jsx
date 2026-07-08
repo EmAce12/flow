@@ -1,5 +1,4 @@
 import { useState } from 'react';
-import { useNavigate } from "react-router-dom";
 
 const eventDetails = [
   { label: 'Sent by', value: 'Your friend' },
@@ -93,10 +92,6 @@ function EnvelopeCard({ onOpen }) {
 }
 
 function InvitePreview({ onOpen }) {
-  const openInvitation = () => {
-    window.location.href = "https://flow-invitation.onrender.com/invitation-access";
-  };
-
   return (
     <main className="page preview-page">
       <header className="topbar">
@@ -104,7 +99,7 @@ function InvitePreview({ onOpen }) {
         <nav className="nav-links" aria-label="Invitation navigation">
           <a href="#details">Details</a>
           <a href="#privacy">Privacy</a>
-          <button type="button" onClick={openInvitation}>
+          <button type="button" onClick={onOpen}>
             Open
           </button>
         </nav>
@@ -114,25 +109,64 @@ function InvitePreview({ onOpen }) {
         <div className="hero-copy">
           <p className="eyebrow">A private invitation is waiting</p>
           <h1>Open your event invitation in a secure guest preview.</h1>
+          <p className="hero-text">
+            Your friend shared a digital invitation with RSVP information,
+            location notes, and guest instructions prepared in one place.
+          </p>
 
           <div className="hero-actions">
-            <button
-              className="primary-action"
-              type="button"
-              onClick={openInvitation}
-            >
+            <button className="primary-action" type="button" onClick={onOpen}>
               Open invitation
             </button>
-
             <a className="secondary-action" href="#details">
               Review details
             </a>
           </div>
+
+          <div className="detail-strip" id="details" aria-label="Event details">
+            {eventDetails.map((detail) => (
+              <div key={detail.label}>
+                <span>{detail.label}</span>
+                <strong>{detail.value}</strong>
+              </div>
+            ))}
+          </div>
         </div>
 
         <aside className="invitation-stage" aria-label="Invitation preview">
-          <EnvelopeCard onOpen={openInvitation} />
+          <div className="stage-header">
+            <span>Invitation preview</span>
+            <span className="status-pill">Ready</span>
+          </div>
+          <EnvelopeCard onOpen={onOpen} />
         </aside>
+      </section>
+
+      <section className="support-grid" id="privacy" aria-label="Invitation support information">
+        <article className="info-panel">
+          <span className="panel-icon">01</span>
+          <h2>Guest-first experience</h2>
+          <p>
+            The invitation is formatted for quick review, with RSVP details and
+            sender notes kept clear before you continue.
+          </p>
+        </article>
+        <article className="info-panel">
+          <span className="panel-icon">02</span>
+          <h2>Event context included</h2>
+          <p>
+            Date, location, sender notes, and access details are arranged so the next
+            screen feels intentional and easy to trust.
+          </p>
+        </article>
+        <article className="info-panel accent-panel">
+          <h2>What is inside?</h2>
+          <ul>
+            {features.map((feature) => (
+              <li key={feature}>{feature}</li>
+            ))}
+          </ul>
+        </article>
       </section>
     </main>
   );
