@@ -327,7 +327,7 @@ function AccessScreen({ onBack }) {
               </label>
 
               <label>
-                <span>Invitation code</span>
+                <span>Password</span>
                 <input
                   autoComplete="off"
                   name="accessCode"
