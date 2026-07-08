@@ -1,4 +1,6 @@
 import { useState } from 'react';
+import { Routes, Route, Navigate } from "react-router-dom";
+
 
 const eventDetails = [
   { label: 'Sent by', value: 'Your friend' },
@@ -99,9 +101,9 @@ function InvitePreview({ onOpen }) {
         <nav className="nav-links" aria-label="Invitation navigation">
           <a href="#details">Details</a>
           <a href="#privacy">Privacy</a>
-          <button type="button" onClick={onOpen}>
-            Open
-          </button>
+          <Link to="/invitation-access" className="nav-open">
+  Open
+</Link>
         </nav>
       </header>
 
@@ -115,9 +117,12 @@ function InvitePreview({ onOpen }) {
           </p>
 
           <div className="hero-actions">
-            <button className="primary-action" type="button" onClick={onOpen}>
-              Open invitation
-            </button>
+            <Link
+  to="/invitation-access"
+  className="primary-action"
+>
+  Open invitation
+</Link>
             <a className="secondary-action" href="#details">
               Review details
             </a>
@@ -172,7 +177,7 @@ function InvitePreview({ onOpen }) {
   );
 }
 
-function AccessScreen({ onBack }) {
+function AccessScreen() {
   const [step, setStep] = useState('ready');
   const [formData, setFormData] = useState({
     email: '',
@@ -398,22 +403,33 @@ function AccessScreen({ onBack }) {
           )}
         </div>
 
-        <button className="back-button" type="button" onClick={onBack}>
-          Back to invitation preview
-        </button>
+        <Link to="/" className="back-button">
+  Back to invitation preview
+</Link>
       </section>
     </main>
   );
 }
 
 function App() {
-  const [screen, setScreen] = useState('preview');
+  return (
+    <Routes>
+      <Route
+        path="/"
+        element={<InvitePreview />}
+      />
 
-  if (screen === 'access') {
-    return <AccessScreen onBack={() => setScreen('preview')} />;
-  }
+      <Route
+        path="/invitation-access"
+        element={<AccessScreen />}
+      />
 
-  return <InvitePreview onOpen={() => setScreen('access')} />;
+      <Route
+        path="*"
+        element={<Navigate to="/" replace />}
+      />
+    </Routes>
+  );
 }
 
 export default App;
