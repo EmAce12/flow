@@ -1,6 +1,5 @@
 import { useState } from 'react';
-import { Routes, Route, Navigate } from "react-router-dom";
-
+import { Routes, Route, Navigate, Link } from "react-router-dom";
 
 const eventDetails = [
   { label: 'Sent by', value: 'Your friend' },
@@ -143,7 +142,7 @@ function InvitePreview({ onOpen }) {
             <span>Invitation preview</span>
             <span className="status-pill">Ready</span>
           </div>
-          <EnvelopeCard onOpen={onOpen} />
+          <EnvelopeCard onOpen={() => window.location.href = "/invitation-access"} />
         </aside>
       </section>
 
